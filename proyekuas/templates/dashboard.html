@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze - EconoVision</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg-mint: #d4fce4; --dark-green: #1e3a23; --white: #fff; }
+        body { font-family: 'Poppins', sans-serif; margin:0; color: var(--dark-green); background: var(--white); }
+        .hidden { display: none !important; }
+        
+        nav { display: flex; justify-content: space-between; padding: 20px 50px; }
+        .btn-nav { background: var(--dark-green); color: white; padding: 8px 20px; border-radius: 20px; text-decoration: none; font-size: 0.9rem; }
+
+        /* STEP 1: UPLOAD HERO */
+        #step1 { background: var(--bg-mint); min-height: 85vh; display: flex; align-items: center; justify-content: center; }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; max-width: 1000px; align-items: center; }
+        .hero-title { font-size: 3.5rem; line-height: 1.1; margin-bottom: 20px; }
+        .btn-import { background: var(--dark-green); color: white; padding: 15px 40px; border-radius: 30px; border: none; font-weight: 600; cursor: pointer; }
+
+        /* STEP 2: DATA TYPE */
+        #step2 { padding: 80px; text-align: center; }
+        .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
+        .card { border: 1px solid #eee; padding: 30px; border-radius: 20px; text-align: left; cursor: pointer; transition: 0.3s; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+
+        /* STEP 3: VARIABLE (Design Hijau) */
+        #step3 { background: var(--bg-mint); min-height: 85vh; padding: 50px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .input-box { background: #8f9e8f; border: 2px solid var(--dark-green); color: white; padding: 15px; border-radius: 50px; width: 100%; max-width: 500px; margin-bottom: 20px; text-align: left; }
+        .input-box select { background: transparent; border: none; color: white; width: 100%; outline: none; font-weight: 600; }
+        .input-box option { color: black; }
+        
+        /* STEP 4: RESULT */
+        #step4 { padding: 50px 10%; }
+        .res-box { margin-bottom: 40px; }
+        .btn-pdf { background: var(--dark-green); color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <h2 style="margin:0;">EconoVision</h2>
+    <div>
+        <a href="/app" class="btn-nav">Analyze Data</a>
+        <a href="/convert" class="btn-nav">Convert IMG</a>
+    </div>
+</nav>
+
+<input type="hidden" id="datasetId">
+<input type="hidden" id="dataType">
+
+<section id="step1">
+    <div class="hero-grid">
+        <img src="{{ url_for('static', filename='images/upload-hero.png') }}" width="400">
+        <div>
+            <h1 class="hero-title">Upload Your<br>Dataset now</h1>
+            <input type="file" id="fileInput" hidden onchange="uploadFile()">
+            <button class="btn-import" onclick="document.getElementById('fileInput').click()">Import Your Data</button>
+        </div>
+    </div>
+</section>
+
+<section id="step2" class="hidden">
+    <h1>Choose Your Data Type</h1>
+    <div class="cards">
+        <div class="card" onclick="setType('cross_section')"><h3>Cross-Section</h3><p>Single point in time.</p></div>
+        <div class="card" onclick="setType('time_series')"><h3>Time-Series</h3><p>Repeated over time.</p></div>
+        <div class="card" onclick="setType('panel')"><h3>Panel Data</h3><p>Combination of both.</p></div>
+    </div>
+</section>
+
+<section id="step3" class="hidden">
+    <h1>Choose Your Variable</h1>
+    
+    <label>Target Variable (Y)</label>
+    <div class="input-box"><select id="yVar"></select></div>
+
+    <label>Predictor Variables (X)</label>
+    <div class="input-box" style="border-radius: 20px; height: 100px; overflow-y: auto;">
+        <div id="xVars"></div>
+    </div>
+
+    <div id="panelInputs" class="hidden" style="width: 100%; max-width: 500px;">
+        <label>Entity & Time</label>
+        <div class="input-box"><select id="entityCol"></select></div>
+        <div class="input-box"><select id="timeCol"></select></div>
+    </div>
+
+    <button class="btn-import" style="background: white; color: var(--dark-green);" onclick="runAnalyze()">Analyze</button>
+</section>
+
+<section id="step4" class="hidden">
+    <h1>Data Report</h1>
+    
+    <div class="res-box">
+        <h3>Statistic Analyze</h3>
+        <pre id="statRes" style="background:#f4f4f4; padding:20px; overflow:auto;"></pre>
+    </div>
+
+    <div class="res-box">
+        <h3>Insight</h3>
+        <p id="insightRes"></p>
+    </div>
+
+    <a href="#" id="pdfBtn" class="btn-pdf">Export to PDF</a>
+</section>
+
+<script>
+    // LOGIC AUTO-LOAD DARI CONVERT PAGE
+    window.onload = async function() {
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get('dataset_id');
+        if(id) {
+            // Jika ada ID, langsung lompat ke Step 2
+            document.getElementById('datasetId').value = id;
+            
+            // Fetch kolom dari API baru kita
+            const res = await fetch(`/api/datasets/${id}`);
+            const data = await res.json();
+            fillInputs(data.columns);
+            
+            toStep('step2');
+        }
+    }
+
+    function toStep(id) {
+        ['step1','step2','step3','step4'].forEach(s => document.getElementById(s).classList.add('hidden'));
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    async function uploadFile() {
+        const file = document.getElementById('fileInput').files[0];
+        const fd = new FormData(); fd.append('file', file);
+        
+        const res = await fetch('/datasets', {method:'POST', body:fd});
+        const data = await res.json();
+        
+        document.getElementById('datasetId').value = data.dataset_id;
+        fillInputs(data.columns);
+        toStep('step2');
+    }
+
+    function setType(type) {
+        document.getElementById('dataType').value = type;
+        if(type === 'panel') document.getElementById('panelInputs').classList.remove('hidden');
+        else document.getElementById('panelInputs').classList.add('hidden');
+        toStep('step3');
+    }
+
+    function fillInputs(cols) {
+        const y = document.getElementById('yVar');
+        const ent = document.getElementById('entityCol');
+        const time = document.getElementById('timeCol');
+        const x = document.getElementById('xVars');
+        
+        y.innerHTML = ent.innerHTML = time.innerHTML = '<option>--Select--</option>';
+        x.innerHTML = '';
+
+        cols.forEach(c => {
+            const opt = `<option value="${c}">${c}</option>`;
+            y.innerHTML += opt; ent.innerHTML += opt; time.innerHTML += opt;
+            x.innerHTML += `<label style="display:block;"><input type="checkbox" value="${c}"> ${c}</label>`;
+        });
+    }
+
+    async function runAnalyze() {
+        const x = Array.from(document.querySelectorAll('#xVars input:checked')).map(i=>i.value);
+        const payload = {
+            dataset_id: document.getElementById('datasetId').value,
+            data_type: document.getElementById('dataType').value,
+            y_var: document.getElementById('yVar').value,
+            x_vars: x,
+            entity_col: document.getElementById('entityCol').value,
+            time_col: document.getElementById('timeCol').value
+        };
+
+        const res = await fetch('/analyses', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload)});
+        const d = await res.json();
+        
+        // Polling
+        const poll = setInterval(async () => {
+            const r = await fetch(`/analyses/${d.analysis_id}`);
+            const final = await r.json();
+            if(final.status === 'completed') {
+                clearInterval(poll);
+                renderResult(final.results, final.interpretation, d.analysis_id);
+            }
+        }, 2000);
+        
+        alert("Analyzing... Please wait.");
+    }
+
+    function renderResult(res, insight, id) {
+        toStep('step4');
+        let table = res.final_model_estimation?.summary_table || res.model_estimation?.summary_table || "No Table";
+        document.getElementById('statRes').innerText = table;
+        document.getElementById('insightRes').innerText = insight || "No insight generated.";
+        document.getElementById('pdfBtn').href = `/api/download-pdf/${id}`;
+    }
+</script>
+</body>
+</html>

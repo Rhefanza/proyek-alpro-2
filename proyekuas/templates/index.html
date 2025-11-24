@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Service Ekonometrika</title>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: 20px auto; padding: 0 20px; background: #f4f4f9; color: #333; }
+        h1 { text-align: center; color: #2c3e50; }
+        .section { background: white; padding: 25px; margin-bottom: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        h2 { margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; color: #007bff; }
+        label { display: block; margin-top: 15px; font-weight: 600; color: #555; }
+        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        
+        .checkbox-container { border: 1px solid #ccc; padding: 10px; max-height: 150px; overflow-y: auto; background: #fafafa; margin-top: 5px; }
+        .checkbox-item { display: block; margin-bottom: 5px; font-weight: normal; cursor: pointer; }
+        
+        button { background: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 20px; }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+
+        .status-box { padding: 15px; margin-top: 10px; border-radius: 4px; text-align: center; font-weight: bold; }
+        .status-loading { background: #e2e3e5; color: #383d41; }
+        .status-success { background: #d4edda; color: #155724; }
+        .status-error { background: #f8d7da; color: #721c24; }
+
+        /* Styles Hasil Laporan */
+        .result-card { background: #fff; border-left: 5px solid #007bff; padding: 20px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .stats-table { font-family: 'Courier New', monospace; white-space: pre; overflow-x: auto; background: #f8f9fa; padding: 15px; border: 1px solid #ddd; font-size: 0.85em; }
+        .badge { padding: 5px 10px; border-radius: 15px; color: white; font-size: 0.9em; }
+        .badge-info { background: #17a2b8; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>📊 Web Service Analisis Ekonometrika</h1>
+
+    <div class="section">
+        <h2>1. Upload File</h2>
+        <p style="color: #666; font-size: 0.9em;">Mendukung: CSV, Excel (.xlsx), dan Gambar (.png, .jpg)</p>
+        <input type="file" id="fileInput" accept=".csv, .xlsx, .xls, .png, .jpg, .jpeg">
+        <button onclick="uploadFile()">📤 Upload File</button>
+        <div id="uploadResult"></div>
+    </div>
+
+    <div class="section">
+        <h2>2. Konfigurasi Analisis</h2>
+        <input type="hidden" id="datasetId">
+
+        <label>Jenis Metode:</label>
+        <select id="dataType">
+            <option value="panel" selected>Panel Data (Otomatis FEM/REM)</option>
+            <option value="cross_section">Cross Section (Regresi)</option>
+            <option value="time_series">Time Series (ARIMA)</option>
+        </select>
+
+        <div id="variableSelectors" style="opacity: 0.5; pointer-events: none; transition: opacity 0.3s;">
+            <label>Variabel Y (Target):</label>
+            <select id="yVar"><option value="">-- Upload file dulu --</option></select>
+
+            <label>Variabel X (Faktor):</label>
+            <div id="xVarsContainer" class="checkbox-container">
+                <div style="text-align:center; color:#999; padding:10px;">Belum ada data kolom</div>
+            </div>
+
+            <div id="panelInputs" style="background:#f0f8ff; padding:15px; border:1px solid #b8daff; margin-top:15px; border-radius:5px;">
+                <label style="margin-top:0">Kolom Entitas (Perusahaan/Negara):</label>
+                <select id="entityCol"><option value="">-- Upload file dulu --</option></select>
+                
+                <label>Kolom Waktu (Tahun/Bulan):</label>
+                <select id="timeCol"><option value="">-- Upload file dulu --</option></select>
+            </div>
+        </div>
+
+        <button id="btnAnalyze" onclick="startAnalysis()" disabled>🚀 Mulai Analisis</button>
+    </div>
+
+    <div class="section">
+        <h2>3. Hasil Laporan</h2>
+        <div id="statusArea"></div>
+        <div id="reportArea"></div>
+    </div>
+
+    <script>
+        // UI Logic
+        document.getElementById('dataType').addEventListener('change', function() {
+            const panelInputs = document.getElementById('panelInputs');
+            if (this.value === 'panel') panelInputs.classList.remove('hidden');
+            else panelInputs.classList.add('hidden');
+        });
+
+        function populateSelectors(columns) {
+            const ySelect = document.getElementById('yVar');
+            const entSelect = document.getElementById('entityCol');
+            const timeSelect = document.getElementById('timeCol');
+            const xCont = document.getElementById('xVarsContainer');
+
+            ySelect.innerHTML = entSelect.innerHTML = timeSelect.innerHTML = '<option value="">-- Pilih Kolom --</option>';
+            xCont.innerHTML = '';
+
+            if (columns.length === 0) {
+                xCont.innerHTML = '<div style="text-align:center; color:#d9534f; padding:10px;">Tidak ada kolom terdeteksi (Mungkin Gambar?)</div>';
+                return;
+            }
+
+            columns.forEach(col => {
+                const opt = `<option value="${col}">${col}</option>`;
+                ySelect.innerHTML += opt;
+                entSelect.innerHTML += opt;
+                timeSelect.innerHTML += opt;
+                xCont.innerHTML += `<label class="checkbox-item"><input type="checkbox" name="xVar" value="${col}"> ${col}</label>`;
+            });
+
+            document.getElementById('variableSelectors').style.opacity = "1";
+            document.getElementById('variableSelectors').style.pointerEvents = "auto";
+            document.getElementById('btnAnalyze').disabled = false;
+        }
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const resDiv = document.getElementById('uploadResult');
+            
+            if (fileInput.files.length === 0) return alert("Pilih file dulu!");
+
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            resDiv.className = 'status-box status-loading';
+            resDiv.innerText = "Mengupload & Membaca...";
+
+            try {
+                const res = await fetch('/datasets', { method: 'POST', body: formData });
+                const data = await res.json();
+
+                if (res.ok) {
+                    document.getElementById('datasetId').value = data.dataset_id;
+                    const ext = data.file_type;
+
+                    if (['png', 'jpg', 'jpeg'].includes(ext)) {
+                        resDiv.className = 'status-box status-success';
+                        resDiv.innerHTML = `✅ Gambar <b>${data.file_name}</b> tersimpan.<br><small>(Fitur OCR belum aktif, kolom tidak muncul)</small>`;
+                        populateSelectors([]); // Kosongkan selector
+                    } else {
+                        resDiv.className = 'status-box status-success';
+                        resDiv.innerText = `✅ File Terbaca: ${data.file_name} (${data.columns.length} Kolom)`;
+                        populateSelectors(data.columns);
+                    }
+                } else {
+                    resDiv.className = 'status-box status-error';
+                    resDiv.innerText = "Gagal: " + data.error;
+                }
+            } catch (e) {
+                resDiv.className = 'status-box status-error';
+                resDiv.innerText = "Error: " + e;
+            }
+        }
+
+        async function startAnalysis() {
+            // Logika kirim request sama seperti sebelumnya
+            const payload = {
+                dataset_id: parseInt(document.getElementById('datasetId').value),
+                data_type: document.getElementById('dataType').value,
+                y_var: document.getElementById('yVar').value,
+                x_vars: Array.from(document.querySelectorAll('input[name="xVar"]:checked')).map(cb => cb.value),
+                entity_col: document.getElementById('entityCol').value,
+                time_col: document.getElementById('timeCol').value
+            };
+            
+            // (Validasi input bisa ditambahkan di sini)
+
+            const statusDiv = document.getElementById('statusArea');
+            document.getElementById('reportArea').innerHTML = "";
+            statusDiv.className = 'status-box status-loading';
+            statusDiv.innerText = "Memproses...";
+
+            try {
+                const res = await fetch('/analyses', {
+                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (res.status === 202) pollResults(data.analysis_id);
+                else {
+                    statusDiv.className = 'status-box status-error';
+                    statusDiv.innerText = "Gagal: " + (data.error || JSON.stringify(data));
+                }
+            } catch (e) { statusDiv.innerText = "Error: " + e; }
+        }
+
+        async function pollResults(analysisId) {
+            const statusDiv = document.getElementById('statusArea');
+            const interval = setInterval(async () => {
+                const res = await fetch('/analyses/' + analysisId);
+                const data = await res.json();
+                if (data.status === 'completed') {
+                    clearInterval(interval);
+                    statusDiv.className = 'status-box status-success';
+                    statusDiv.innerText = "Selesai!";
+                    renderReport(data.results);
+                } else if (data.status === 'failed') {
+                    clearInterval(interval);
+                    statusDiv.className = 'status-box status-error';
+                    statusDiv.innerText = "Gagal: " + data.error;
+                }
+            }, 2000);
+        }
+
+        function renderReport(results) {
+            const container = document.getElementById('reportArea');
+            container.innerHTML = "";
+
+            if (results.error) {
+                container.innerHTML = `<div class="result-card" style="border-left-color:red"><h3 style="color:red">Error</h3><pre>${results.error}</pre></div>`;
+                return;
+            }
+
+            // Tampilkan Model & Tabel
+            let summary = results.final_model_estimation?.summary_table || results.model_estimation?.summary_table || "";
+            container.innerHTML += `
+                <div class="result-card">
+                    <h3>Kesimpulan</h3>
+                    <span class="badge badge-info">${results.chosen_model || results.model_type}</span>
+                </div>`;
+            
+            if (summary) {
+                container.innerHTML += `<div class="result-card"><h3>Statistik</h3><div class="stats-table">${summary}</div></div>`;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+# Virtual Environment (Wajib di-ignore biar gak berat)
+.venv/
+venv/
+env/
+
+# Python cache (File sampah otomatis)
+__pycache__/
+*.py[cod]
+
+# Database Lokal (Jangan di-upload, nanti bentrok)
+*.db
+*.sqlite3
+
+# Folder Uploads (Opsional: agar file tes tidak ikut naik)
+uploads/*
+!uploads/.gitkeep
+
+# File sistem/OS
+.DS_Store
+Thumbs.db

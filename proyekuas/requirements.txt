@@ -1,0 +1,23 @@
+# --- Core Framework ---
+flask
+flask_sqlalchemy
+flask_migrate
+werkzeug
+
+# --- Data Processing & Statistics ---
+pandas
+numpy
+scipy
+statsmodels
+linearmodels
+pmdarima
+scikit-learn
+
+# --- File Handling (Excel Support) ---
+openpyxl
+
+# --- Reporting (PDF Generation) ---
+fpdf
+
+# --- Image Processing (Persiapan untuk OCR) ---
+# pillow
