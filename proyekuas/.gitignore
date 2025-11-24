@@ -18,3 +18,6 @@ uploads/*
 # File sistem/OS
 .DS_Store
 Thumbs.db
+
+#api gemini key
+.env
