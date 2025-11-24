@@ -306,5 +306,5 @@ if __name__ == '__main__':
     with app.app_context():
         db.create_all()
     
-    print("🚀 Server EconoVision berjalan di http://127.0.0.1:5000")
+    print("Server EconoVision berjalan di http://127.0.0.1:5000")
     app.run(debug=True)
