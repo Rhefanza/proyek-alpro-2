@@ -1,90 +1,246 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Service Ekonometrika</title>
+    <title>EconoVision - Smart Economic Analysis</title>
+
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Raleway:wght@300;400;700&family=Ubuntu:wght@300;400;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+    <!-- Main CSS -->
+    <link href="assets/css/main.css" rel="stylesheet">
+
     <style>
-        body { font-family: 'Segoe UI', sans-serif; max-width: 900px; margin: 20px auto; padding: 0 20px; background: #f4f4f9; color: #333; }
-        h1 { text-align: center; color: #2c3e50; }
-        .section { background: white; padding: 25px; margin-bottom: 25px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        h2 { margin-top: 0; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; color: #007bff; }
-        label { display: block; margin-top: 15px; font-weight: 600; color: #555; }
-        input, select { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        
-        .checkbox-container { border: 1px solid #ccc; padding: 10px; max-height: 150px; overflow-y: auto; background: #fafafa; margin-top: 5px; }
-        .checkbox-item { display: block; margin-bottom: 5px; font-weight: normal; cursor: pointer; }
-        
-        button { background: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; cursor: pointer; font-weight: bold; margin-top: 20px; }
-        button:hover { background: #0056b3; }
-        button:disabled { background: #ccc; cursor: not-allowed; }
+        /* Area Statistik */
+        .stats-table {
+            white-space: pre;
+            overflow-x: auto;
+            background: var(--surface-color);
+            padding: 15px;
+            border: 1px solid color-mix(in srgb, var(--default-color), transparent 70%);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-family: monospace;
+        }
 
-        .status-box { padding: 15px; margin-top: 10px; border-radius: 4px; text-align: center; font-weight: bold; }
-        .status-loading { background: #e2e3e5; color: #383d41; }
-        .status-success { background: #d4edda; color: #155724; }
-        .status-error { background: #f8d7da; color: #721c24; }
+        /* Checkbox */
+        .checkbox-container {
+            border: 1px solid color-mix(in srgb, var(--default-color), transparent 85%);
+            padding: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            background: var(--surface-color);
+            border-radius: 4px;
+        }
 
-        /* Styles Hasil Laporan */
-        .result-card { background: #fff; border-left: 5px solid #007bff; padding: 20px; margin-bottom: 20px; border-radius: 4px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .stats-table { font-family: 'Courier New', monospace; white-space: pre; overflow-x: auto; background: #f8f9fa; padding: 15px; border: 1px solid #ddd; font-size: 0.85em; }
-        .badge { padding: 5px 10px; border-radius: 15px; color: white; font-size: 0.9em; }
-        .badge-info { background: #17a2b8; }
-        .hidden { display: none; }
+        .checkbox-item {
+            display: block;
+            margin-bottom: 6px;
+            cursor: pointer;
+        }
+
+        /* Result card */
+        .result-card {
+            background: var(--surface-color);
+            border-left: 5px solid var(--accent-color);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0px 2px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Status box */
+        .status-box {
+            padding: 12px;
+            border-radius: 4px;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        .status-loading {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        .status-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
     </style>
 </head>
-<body>
 
-    <h1>📊 Web Service Analisis Ekonometrika</h1>
+<body class="index-page">
 
-    <div class="section">
-        <h2>1. Upload File</h2>
-        <p style="color: #666; font-size: 0.9em;">Mendukung: CSV, Excel (.xlsx), dan Gambar (.png, .jpg)</p>
-        <input type="file" id="fileInput" accept=".csv, .xlsx, .xls, .png, .jpg, .jpeg">
-        <button onclick="uploadFile()">📤 Upload File</button>
-        <div id="uploadResult"></div>
-    </div>
+    <!-- ======= Header ======= -->
+    <header id="header" class="header d-flex align-items-center sticky-top">
+        <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
 
-    <div class="section">
-        <h2>2. Konfigurasi Analisis</h2>
-        <input type="hidden" id="datasetId">
+            <a href="/" class="logo d-flex align-items-center">
+                <h1 class="sitename">EconoVision</h1>
+            </a>
 
-        <label>Jenis Metode:</label>
-        <select id="dataType">
-            <option value="panel" selected>Panel Data (Otomatis FEM/REM)</option>
-            <option value="cross_section">Cross Section (Regresi)</option>
-            <option value="time_series">Time Series (ARIMA)</option>
-        </select>
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <li><a href="#smart">How It Works</a></li>
+                    <li><a href="/app" class="btn-getstarted">Analyze Data</a></li>
+                    <li><a href="/convert" class="btn-getstarted">Convert IMG</a></li>
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
 
-        <div id="variableSelectors" style="opacity: 0.5; pointer-events: none; transition: opacity 0.3s;">
-            <label>Variabel Y (Target):</label>
-            <select id="yVar"><option value="">-- Upload file dulu --</option></select>
+        </div>
+    </header>
+    <!-- End Header -->
 
-            <label>Variabel X (Faktor):</label>
-            <div id="xVarsContainer" class="checkbox-container">
-                <div style="text-align:center; color:#999; padding:10px;">Belum ada data kolom</div>
+
+    <!-- ======= Upload Section ======= -->
+    <section class="section">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Upload File</h2>
+                <p>Mendukung CSV, Excel (xlsx), dan Gambar (jpg/png)</p>
             </div>
 
-            <div id="panelInputs" style="background:#f0f8ff; padding:15px; border:1px solid #b8daff; margin-top:15px; border-radius:5px;">
-                <label style="margin-top:0">Kolom Entitas (Perusahaan/Negara):</label>
-                <select id="entityCol"><option value="">-- Upload file dulu --</option></select>
-                
-                <label>Kolom Waktu (Tahun/Bulan):</label>
-                <select id="timeCol"><option value="">-- Upload file dulu --</option></select>
+            <input class="form-control" type="file" id="fileInput" accept=".csv, .xlsx, .xls, .png, .jpg, .jpeg">
+
+            <button class="btn-getstarted mt-3" onclick="uploadFile()">📤 Upload File</button>
+
+            <div id="uploadResult"></div>
+
+        </div>
+    </section>
+
+    <!-- ======= Configuration Section ======= -->
+    <section class="section">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Konfigurasi Analisis</h2>
+            </div>
+
+            <input type="hidden" id="datasetId">
+
+            <!-- Jenis metode -->
+            <label class="fw-bold">Jenis Metode:</label>
+            <select id="dataType" class="form-control">
+                <option value="panel" selected>Panel Data (FEM/REM)</option>
+                <option value="cross_section">Cross Section</option>
+                <option value="time_series">Time Series (ARIMA)</option>
+            </select>
+
+            <!-- Variable selectors -->
+            <div id="variableSelectors" style="opacity:0.5; pointer-events:none; transition:0.3s;">
+
+                <label class="fw-bold mt-3">Variabel Y (Target):</label>
+                <select id="yVar" class="form-control">
+                    <option value="">-- Upload file dulu --</option>
+                </select>
+
+                <label class="fw-bold mt-3">Variabel X (Faktor):</label>
+                <div id="xVarsContainer" class="checkbox-container">
+                    <div style="text-align:center; color:#888;">Belum ada kolom</div>
+                </div>
+
+                <!-- Panel section -->
+                <div id="panelInputs" class="mt-3 p-3"
+                    style="border:1px solid var(--accent-color); border-radius:6px; background:color-mix(in srgb, var(--accent-color), transparent 92%);">
+
+                    <label>Kolom Entitas:</label>
+                    <select id="entityCol" class="form-control">
+                        <option value="">-- Upload file dulu --</option>
+                    </select>
+
+                    <label class="mt-2">Kolom Waktu:</label>
+                    <select id="timeCol" class="form-control">
+                        <option value="">-- Upload file dulu --</option>
+                    </select>
+
+                </div>
+            </div>
+
+            <button id="btnAnalyze" class="btn-getstarted mt-4" disabled onclick="startAnalysis()">
+                🚀 Mulai Analisis
+            </button>
+
+        </div>
+    </section>
+
+    <!-- ======= Report Section ======= -->
+    <section class="section">
+        <div class="container">
+
+            <div class="section-title">
+                <h2>Hasil Laporan</h2>
+            </div>
+
+            <div id="statusArea"></div>
+            <div id="reportArea"></div>
+
+        </div>
+    </section>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="container footer-top">
+            <div class="row gy-4">
+
+                <div class="col-lg-4 col-md-6 footer-about">
+                    <a href="/" class="logo d-flex align-items-center">
+                        <span class="sitename">EconoVision</span>
+                    </a>
+                    <p>
+                        <strong>Financial Clarity You Can Trust</strong><br>
+                        Trusted financial guidance since 1987.
+                    </p>
+                </div>
+
+                <div class="col-lg-4 col-md-6 footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#smart">How It Works</a></li>
+                        <li><a href="/app">Analyze Data</a></li>
+                        <li><a href="/convert">Convert IMG</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 text-lg-end">
+                    <p>© 2025 All Rights Reserved</p>
+                </div>
+
             </div>
         </div>
+    </footer>
+    <!-- End Footer -->
 
-        <button id="btnAnalyze" onclick="startAnalysis()" disabled>🚀 Mulai Analisis</button>
-    </div>
+    <!-- Vendor JS -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script> AOS.init(); </script>
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
 
-    <div class="section">
-        <h2>3. Hasil Laporan</h2>
-        <div id="statusArea"></div>
-        <div id="reportArea"></div>
-    </div>
+    <!-- Main JS -->
+    <script src="assets/js/main.js"></script>
 
+    <!-- Custom JS -->
     <script>
-        // UI Logic
-        document.getElementById('dataType').addEventListener('change', function() {
+        document.getElementById('dataType').addEventListener('change', function () {
             const panelInputs = document.getElementById('panelInputs');
             if (this.value === 'panel') panelInputs.classList.remove('hidden');
             else panelInputs.classList.add('hidden');
@@ -96,11 +252,16 @@
             const timeSelect = document.getElementById('timeCol');
             const xCont = document.getElementById('xVarsContainer');
 
-            ySelect.innerHTML = entSelect.innerHTML = timeSelect.innerHTML = '<option value="">-- Pilih Kolom --</option>';
+            ySelect.innerHTML =
+                entSelect.innerHTML =
+                timeSelect.innerHTML =
+                '<option value="">-- Pilih Kolom --</option>';
+
             xCont.innerHTML = '';
 
             if (columns.length === 0) {
-                xCont.innerHTML = '<div style="text-align:center; color:#d9534f; padding:10px;">Tidak ada kolom terdeteksi (Mungkin Gambar?)</div>';
+                xCont.innerHTML =
+                    '<div style="text-align:center; color:#d9534f; padding:10px;">Tidak ada kolom terdeteksi (Mungkin Gambar?)</div>';
                 return;
             }
 
@@ -109,7 +270,10 @@
                 ySelect.innerHTML += opt;
                 entSelect.innerHTML += opt;
                 timeSelect.innerHTML += opt;
-                xCont.innerHTML += `<label class="checkbox-item"><input type="checkbox" name="xVar" value="${col}"> ${col}</label>`;
+                xCont.innerHTML += `
+                    <label class="checkbox-item">
+                        <input type="checkbox" name="xVar" value="${col}"> ${col}
+                    </label>`;
             });
 
             document.getElementById('variableSelectors').style.opacity = "1";
@@ -120,8 +284,9 @@
         async function uploadFile() {
             const fileInput = document.getElementById('fileInput');
             const resDiv = document.getElementById('uploadResult');
-            
-            if (fileInput.files.length === 0) return alert("Pilih file dulu!");
+
+            if (fileInput.files.length === 0)
+                return alert("Pilih file dulu!");
 
             const formData = new FormData();
             formData.append('file', fileInput.files[0]);
@@ -140,7 +305,7 @@
                     if (['png', 'jpg', 'jpeg'].includes(ext)) {
                         resDiv.className = 'status-box status-success';
                         resDiv.innerHTML = `✅ Gambar <b>${data.file_name}</b> tersimpan.<br><small>(Fitur OCR belum aktif, kolom tidak muncul)</small>`;
-                        populateSelectors([]); // Kosongkan selector
+                        populateSelectors([]);
                     } else {
                         resDiv.className = 'status-box status-success';
                         resDiv.innerText = `✅ File Terbaca: ${data.file_name} (${data.columns.length} Kolom)`;
@@ -157,7 +322,6 @@
         }
 
         async function startAnalysis() {
-            // Logika kirim request sama seperti sebelumnya
             const payload = {
                 dataset_id: parseInt(document.getElementById('datasetId').value),
                 data_type: document.getElementById('dataType').value,
@@ -166,42 +330,52 @@
                 entity_col: document.getElementById('entityCol').value,
                 time_col: document.getElementById('timeCol').value
             };
-            
-            // (Validasi input bisa ditambahkan di sini)
 
             const statusDiv = document.getElementById('statusArea');
             document.getElementById('reportArea').innerHTML = "";
+
             statusDiv.className = 'status-box status-loading';
             statusDiv.innerText = "Memproses...";
 
             try {
                 const res = await fetch('/analyses', {
-                    method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
                 });
+
                 const data = await res.json();
+
                 if (res.status === 202) pollResults(data.analysis_id);
                 else {
                     statusDiv.className = 'status-box status-error';
                     statusDiv.innerText = "Gagal: " + (data.error || JSON.stringify(data));
                 }
-            } catch (e) { statusDiv.innerText = "Error: " + e; }
+            } catch (e) {
+                statusDiv.innerText = "Error: " + e;
+            }
         }
 
         async function pollResults(analysisId) {
             const statusDiv = document.getElementById('statusArea');
+
             const interval = setInterval(async () => {
                 const res = await fetch('/analyses/' + analysisId);
                 const data = await res.json();
+
                 if (data.status === 'completed') {
                     clearInterval(interval);
                     statusDiv.className = 'status-box status-success';
                     statusDiv.innerText = "Selesai!";
                     renderReport(data.results);
-                } else if (data.status === 'failed') {
+                }
+
+                else if (data.status === 'failed') {
                     clearInterval(interval);
                     statusDiv.className = 'status-box status-error';
                     statusDiv.innerText = "Gagal: " + data.error;
                 }
+
             }, 2000);
         }
 
@@ -210,22 +384,34 @@
             container.innerHTML = "";
 
             if (results.error) {
-                container.innerHTML = `<div class="result-card" style="border-left-color:red"><h3 style="color:red">Error</h3><pre>${results.error}</pre></div>`;
+                container.innerHTML = `
+                    <div class="result-card" style="border-left-color:red">
+                        <h3 style="color:red">Error</h3>
+                        <pre>${results.error}</pre>
+                    </div>`;
                 return;
             }
 
-            // Tampilkan Model & Tabel
-            let summary = results.final_model_estimation?.summary_table || results.model_estimation?.summary_table || "";
+            const summary = results.final_model_estimation?.summary_table
+                || results.model_estimation?.summary_table
+                || "";
+
             container.innerHTML += `
                 <div class="result-card">
                     <h3>Kesimpulan</h3>
                     <span class="badge badge-info">${results.chosen_model || results.model_type}</span>
                 </div>`;
-            
+
             if (summary) {
-                container.innerHTML += `<div class="result-card"><h3>Statistik</h3><div class="stats-table">${summary}</div></div>`;
+                container.innerHTML += `
+                    <div class="result-card">
+                        <h3>Statistik</h3>
+                        <div class="stats-table">${summary}</div>
+                    </div>`;
             }
         }
     </script>
+
 </body>
+
 </html>

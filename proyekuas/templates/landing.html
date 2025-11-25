@@ -1,181 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EconoVision - Smart Economic Analysis</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-mint: #d4fce4;       /* Hijau Muda (Hero) */
-            --dark-green: #1e3a23;    /* Hijau Gelap (Teks/Footer) */
-            --white: #ffffff;
-            --text-gray: #4b5563;
-        }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Poppins', sans-serif; color: var(--dark-green); overflow-x: hidden; }
-        a { text-decoration: none; color: inherit; }
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Raleway:wght@300;400;700&family=Ubuntu:wght@300;400;700&display=swap"
+        rel="stylesheet">
 
-        /* NAVBAR */
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 50px; background: white; position: sticky; top: 0; z-index: 100;
-        }
-        .logo { font-size: 1.5rem; font-weight: 600; color: var(--dark-green); }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .nav-item { font-weight: 500; font-size: 0.9rem; cursor: pointer; }
-        
-        .btn-nav {
-            background-color: var(--dark-green); color: white; padding: 10px 24px;
-            border-radius: 50px; font-weight: 600; font-size: 0.9rem; transition: transform 0.2s;
-        }
-        .btn-nav:hover { transform: scale(1.05); opacity: 0.9; }
+    <!-- Vendor CSS Files -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        /* HERO SECTION */
-        .hero {
-            background-color: var(--bg-mint); min-height: 90vh;
-            display: flex; align-items: center; justify-content: center; padding: 50px;
-        }
-        .hero-container {
-            display: flex; align-items: center; justify-content: space-between;
-            max-width: 1200px; width: 100%; gap: 50px;
-        }
-        .hero-text { flex: 1; }
-        .hero-title { font-size: 4rem; line-height: 1.1; font-weight: 600; margin-bottom: 20px; text-transform: uppercase; }
-        .hero-desc { font-size: 1rem; line-height: 1.6; margin-bottom: 30px; max-width: 500px; color: var(--text-gray); }
-        
-        .hero-buttons { display: flex; gap: 15px; }
-        .hero-image { flex: 1; display: flex; justify-content: flex-end; }
-        .hero-img-placeholder { width: 100%; max-width: 500px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1)); }
-
-        /* SECTION: SMART ANALYZE */
-        .section-white { padding: 80px 50px; display: flex; align-items: center; justify-content: center; flex-direction: column; }
-        .smart-container { max-width: 1000px; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
-        .smart-img { width: 100%; border-radius: 20px; }
-        .smart-title { font-size: 2.5rem; line-height: 1.2; margin-bottom: 20px; }
-
-        /* SECTION: AUDIENCE (CARDS) */
-        .audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1200px; margin-top: 50px; }
-        .aud-card { padding: 20px; border-left: 3px solid #eee; }
-        .aud-icon { font-size: 2rem; margin-bottom: 15px; }
-        .aud-title { font-size: 1.5rem; margin-bottom: 5px; }
-        .aud-tag { font-size: 0.85rem; color: #888; display: block; margin-bottom: 15px; }
-
-        /* SECTION: LEARN HOW (Stairs) */
-        .learn-block { 
-            background-color: #f9f9f9; border-radius: 30px; overflow: hidden; 
-            display: flex; max-width: 1200px; margin: 50px auto; 
-        }
-        .learn-left { background-color: #2f4f2f; color: white; padding: 60px; flex: 1; display: flex; flex-direction: column; justify-content: center; }
-        .learn-right { background-color: #d1fadf; flex: 1; display: flex; align-items: center; justify-content: center; }
-        .btn-learn { background: white; color: #2f4f2f; padding: 12px 30px; border-radius: 30px; width: fit-content; margin-top: 30px; font-weight: 600; }
-
-        /* FOOTER */
-        footer {
-            background-color: var(--dark-green); color: white;
-            padding: 60px 50px; display: flex; justify-content: space-between; align-items: flex-end;
-        }
-        .footer-btn { background: white; color: var(--dark-green); padding: 10px 20px; border-radius: 30px; font-weight: 600; margin-left: 10px; }
-
-    </style>
+    <!-- Main CSS -->
+    <link href="assets/css/main.css" rel="stylesheet">
 </head>
-<body>
 
-    <nav>
-        <a href="/" class="logo" style="text-decoration:none; color:inherit;">
-    EconoVision </a>
+<body class="index-page">
 
-        <div class="nav-links">
-            <span class="nav-item">How It Works</span>
-            <a href="/app" class="btn-nav">Analyze Your Data</a>
-            <a href="/convert" class="btn-nav">Convert IMG</a>
+    <!-- ======= Header ======= -->
+    <header id="header" class="header d-flex align-items-center sticky-top">
+        <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
+
+            <a href="/" class="logo d-flex align-items-center">
+                <h1 class="sitename">EconoVision</h1>
+            </a>
+
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <li><a href="#smart">How It Works</a></li>
+                    <li><a href="/app" class="btn-getstarted">Analyze Data</a></li>
+                    <li><a href="/convert" class="btn-getstarted">Convert IMG</a></li>
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
+
         </div>
-    </nav>
+    </header>
+    <!-- End Header -->
 
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-image">
-                <img src="{{ url_for('static', filename='images/Graph.png') }}" alt="Chart Graphic" class="hero-img-placeholder">
+    <!-- ======= Hero Section ======= -->
+    <section id="hero" class="hero section light-background">
+
+        <div class="container">
+            <div class="row align-items-center gy-4">
+
+                <!-- Image -->
+                <div class="col-lg-6 order-1 order-lg-2 text-center" data-aos="fade-left">
+                    <img src="{{ url_for('static', filename='images/Graph.png') }}" class="img-fluid hero-img"
+                        alt="Chart Graphic">
+                </div>
+
+                <!-- Text -->
+                <div class="col-lg-6 order-2 order-lg-1 d-flex flex-column justify-content-center"
+                    data-aos="fade-right">
+                    <h1>ECONOVISION</h1>
+                    <p>
+                        Econovision makes economic data analysis simple and intelligent.
+                        Upload your CSV, choose the analysis you need, and get instant statistical insights.
+                    </p>
+                    <div class="d-flex">
+                        <a href="/app" class="btn-get-started">Analyze Your Data</a>
+                        <a href="/convert" class="btn-get-started ms-3">Convert Image</a>
+                    </div>
+                </div>
+
             </div>
-            <div class="hero-text">
-                <h1 class="hero-title">ECONOVISION</h1>
-                <p class="hero-desc">
-                    Econovision makes economic data analysis simple and intelligent. 
-                    Upload your CSV, choose the analysis you need, and the system instantly generates statistical insights.
-                </p>
-                <div class="hero-buttons">
-                    <a href="/app" class="btn-nav">Analyze Your Data</a>
-                    <a href="/convert" class="btn-nav">Convert Image</a>
+        </div>
+
+    </section>
+    <!-- End Hero -->
+
+    <!-- ======= Smart Analyze Section ======= -->
+    <section id="smart" class="about section">
+
+        <div class="container">
+
+            <div class="row gy-4 align-items-center">
+                <div class="col-lg-6" data-aos="fade-right">
+                    <img src="{{ url_for('static', filename='images/typing.jpeg') }}" class="img-fluid rounded-4"
+                        alt="Working">
+                </div>
+
+                <div class="col-lg-6" data-aos="fade-left">
+                    <h2>Smart Analyze for Everyone</h2>
+                    <p>
+                        At Econovision, understanding economic data becomes effortless—
+                        whether you're a student, a researcher, or a professional.
+                    </p>
                 </div>
             </div>
+
+            <!-- Audience Cards -->
+            <div class="row gy-4 mt-5">
+
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in">
+                    <div class="service-item position-relative">
+                        <div class="icon"><i class="bi bi-folder2"></i></div>
+                        <h3>For Freelancers</h3>
+                        <p>Simple, fast insights to help understand income flow.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="150">
+                    <div class="service-item position-relative">
+                        <div class="icon"><i class="bi bi-mortarboard"></i></div>
+                        <h3>For Students</h3>
+                        <p>Convert raw economic data into clear learning guidance.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6" data-aos="zoom-in" data-aos-delay="300">
+                    <div class="service-item position-relative">
+                        <div class="icon"><i class="bi bi-building"></i></div>
+                        <h3>Small Business</h3>
+                        <p>Analyze financial data efficiently for strategic decisions.</p>
+                    </div>
+                </div>
+
+            </div>
+
         </div>
+
     </section>
+    <!-- End Smart Section -->
 
-    <section class="section-white">
-        <div class="smart-container">
-            <img src="{{ url_for('static', filename='images/typing.jpeg') }}" alt="Working" class="smart-img">
-            <div>
-                <h2 class="smart-title">Smart Analyze for<br>everyone</h2>
-                <p style="color: #666; line-height: 1.6;">
-                    At Econovision, we believe that understanding economic data should be effortless for everyone, 
-                    whether you're a student, a researcher, or a professional.
-                </p>
-            </div>
-        </div>
+    <!-- ======= Learn Section ======= -->
+    <section id="learn" class="call-to-action section">
 
-        <div class="audience-grid">
-            <div class="aud-card">
-                <div class="aud-icon">📂</div>
-                <h3 class="aud-title">For Freelancers</h3>
-                <span class="aud-tag">Simplicity & Control</span>
-                <p>Simple, fast, and reliable financial insights helping them understand income flow.</p>
-            </div>
-            <div class="aud-card">
-                <div class="aud-icon">🎓</div>
-                <h3 class="aud-title">For Students</h3>
-                <span class="aud-tag">Stability & Learning</span>
-                <p>Turn raw economic data into clear guidance and understand financial patterns.</p>
-            </div>
-            <div class="aud-card">
-                <div class="aud-icon">🏢</div>
-                <h3 class="aud-title">Small Business</h3>
-                <span class="aud-tag">Growth & Strategy</span>
-                <p>Manage and understand financial data efficiently through quick analysis.</p>
-            </div>
-        </div>
-    </section>
+        <img src="{{ url_for('static', filename='images/stairs.jpeg') }}" alt="Steps">
 
-    <section style="padding: 0 50px;">
-        <div class="learn-block">
-            <div class="learn-left">
-                <h2 style="font-size: 2.5rem; margin-bottom: 20px;">Learn How To Do It</h2>
-                <p>Discover simple, step-by-step guidance to understand your data, run analyses, and interpret results with confidence.</p>
-                <a href="#" class="btn-learn">Learn More</a>
-            </div>
-            <div class="learn-right">
-                <img src="{{ url_for('static', filename='images/stairs.jpeg') }}" alt="Steps" style="max-width: 100%;">
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <div>
-            <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">EcoVision</div>
-            <p style="max-width: 300px; font-size: 0.9rem; opacity: 0.8;">
-                <strong>Financial Clarity You Can Trust</strong><br>
-                Trusted financial guidance since 1987.
+        <div class="container text-center" data-aos="fade-up">
+            <h3>Learn How To Do It</h3>
+            <p>
+                Discover simple, step-by-step guidance to understand your data,
+                run analyses, and interpret results with confidence.
             </p>
+            <a href="/" class="btn-get-started">Learn More</a>
         </div>
-        <div style="text-align: right;">
-            <div style="margin-bottom: 20px;">
-                <span style="margin-right: 15px;">How It Works</span>
-                <a href="/app" class="footer-btn">Analyze Data</a>
-                <a href="/convert" class="footer-btn">Convert IMG</a>
+
+    </section>
+    <!-- End Learn Section -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+
+        <div class="container footer-top">
+            <div class="row gy-4">
+
+                <div class="col-lg-4 col-md-6 footer-about">
+                    <a href="/" class="logo d-flex align-items-center">
+                        <span class="sitename">EconoVision</span>
+                    </a>
+                    <p>
+                        <strong>Financial Clarity You Can Trust</strong><br>
+                        Trusted financial guidance since 1987.
+                    </p>
+                </div>
+
+                <div class="col-lg-4 col-md-6 footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#smart">How It Works</a></li>
+                        <li><a href="/app">Analyze Data</a></li>
+                        <li><a href="/convert">Convert IMG</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 text-lg-end">
+                    <p>© 2025 All Rights Reserved</p>
+                </div>
+
             </div>
-            <p style="font-size: 0.8rem; opacity: 0.6;">© 2025 All Rights Reserved</p>
         </div>
+
     </footer>
+    <!-- End Footer -->
+
+    <!-- Vendor JS Files -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+
+    <!-- Main JS -->
+    <script src="assets/js/main.js"></script>
 
 </body>
+
 </html>

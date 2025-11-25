@@ -1,200 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EconoVision - Smart Economic Analysis</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --mint: #d7ffe7;
-            --dark: #1d3b2a;
-            --gray: #4b4b4b;
-        }
+    <title>EconoVision - How It Works</title>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: "Poppins", sans-serif; color: var(--dark); }
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&family=Raleway:wght@300;400;700&family=Ubuntu:wght@300;400;700&display=swap"
+        rel="stylesheet">
 
-        /* NAV */
-        nav {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 20px 50px; background: white; border-bottom: 1px solid #eee;
-            position: sticky; top: 0; z-index: 50;
-        }
-        .logo { font-size: 1.4rem; font-weight: 600; }
-        .nav-links { display: flex; gap: 20px; align-items: center; }
-        .btn-nav {
-            padding: 10px 24px; border-radius: 30px; background: var(--dark); color: white;
-            font-size: 0.9rem; font-weight: 600; transition: 0.2s;
-        }
-        .btn-nav:hover { opacity: 0.85; }
+    <!-- Vendor CSS -->
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
-        /* SECTION TITLE */
-        .section-title {
-            text-align: center; margin-top: 50px; font-size: 2.3rem; font-weight: 600;
-        }
-
-        /* 3 Steps Section */
-        .steps-section { padding: 60px 80px; }
-        .step {
-            display: flex; align-items: center; justify-content: space-between; margin: 80px 0;
-        }
-        .step-number {
-            font-size: 5rem; font-weight: 300; opacity: 0.6;
-        }
-        .step-text { width: 50%; padding-left: 20px; }
-        .step-title { font-size: 1.6rem; margin-bottom: 10px; }
-        .step-desc { font-size: 0.95rem; line-height: 1.6; color: var(--gray); }
-
-        .step-img { width: 260px; }
-
-        /* Why This Matters */
-        .why-section { padding: 40px 0 80px; }
-        .why-title { text-align: center; font-size: 2rem; margin-bottom: 40px; }
-
-        .why-card {
-            width: 75%; margin: 0 auto 25px auto;
-            background: #e8ffef; padding: 25px; border-radius: 15px; text-align: center;
-            font-size: 1.1rem;
-        }
-
-        /* Data is the New Oil */
-        .oil-section {
-            padding: 80px 80px; display: flex; justify-content: space-between; align-items: center;
-        }
-        .oil-text { font-size: 2rem; font-weight: 600; max-width: 450px; line-height: 1.3; }
-        .oil-img { width: 350px; }
-
-        .btn-main {
-            padding: 12px 30px; background: var(--dark); color: white; 
-            border-radius: 30px; margin-top: 20px; display: inline-block;
-        }
-
-        /* FOOTER */
-        footer {
-            background: var(--dark); color: white; padding: 40px 50px;
-            display: flex; justify-content: space-between; align-items: flex-end;
-        }
-        .footer-btn { background: white; color: var(--dark); padding: 10px 20px; border-radius: 20px; }
-    </style>
+    <!-- Main CSS -->
+    <link href="assets/css/main.css" rel="stylesheet">
 </head>
 
 <body>
 
-    <!-- NAVIGATION -->
-    <nav>
-        <div class="logo">EconoVision</div>
-        <div class="nav-links">
-            <span>How It Works</span>
-            <a href="/app" class="btn-nav">Analyze Your Data</a>
-            <a href="/convert" class="btn-nav">Convert IMG</a>
+    <!-- ======= Header ======= -->
+    <header id="header" class="header d-flex align-items-center sticky-top">
+        <div class="container-fluid container-xl d-flex justify-content-between align-items-center">
+
+            <a href="/" class="logo d-flex align-items-center">
+                <h1 class="sitename">EconoVision</h1>
+            </a>
+
+            <nav id="navmenu" class="navmenu">
+                <ul>
+                    <li><a href="/howto" class="active">How It Works</a></li>
+                    <li><a href="/app" class="btn-getstarted">Analyze Data</a></li>
+                    <li><a href="/convert" class="btn-getstarted">Convert IMG</a></li>
+                </ul>
+                <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
+
         </div>
-    </nav>
+    </header>
+    <!-- End Header -->
 
-
-    <!-- SECTION TITLE -->
-    <h1 class="section-title">Start in Minutes, Understand in Moments</h1>
-    <p style="text-align:center; color:#444; margin-top:10px;">
-        Unlock your data instantly. Simple steps, clear insights, zero complexity.
-    </p>
-
-
-    <!-- 3 MAIN STEPS -->
-    <section class="steps-section">
-
-        <!-- STEP 1 -->
-        <div class="step">
-            <div class="step-number">1</div>
-            <div class="step-text">
-                <div class="step-title">Upload Your Data</div>
-                <p class="step-desc">
-                    Upload your economic data in CSV or Excel format with a simple drag-and-drop.
-                    No complicated setup, no requirements—just select your file and upload smoothly.
-                </p>
-            </div>
-            <img src="{{ url_for('static', filename='images/report.jpeg') }}" alt="up data" class="hero-img-placeholder">
-        </div>
-
-        <!-- STEP 2 -->
-        <div class="step">
-            <div class="step-number">2</div>
-            <div class="step-text">
-                <div class="step-title">Choose Your Analysis</div>
-                <p class="step-desc">
-                    Select the variables you want to explore. Pick the data points that matter most,
-                    adjust your selections, and customize the focus of your analysis easily.
-                </p>
-            </div>
-            <img src="{{ url_for('static', filename='images/checklist.jpeg') }}" alt="checklist" class="hero-img-placeholder">
-        </div>
-
-        <!-- STEP 3 -->
-        <div class="step">
-            <div class="step-number">3</div>
-            <div class="step-text">
-                <div class="step-title">Get Your Results</div>
-                <p class="step-desc">
-                    View your results instantly in a clean, organized format. Understand key insights,
-                    interpret findings quickly, and use your data confidently.
-                </p>
-            </div>
-            <img src="{{ url_for('static', filename='images/result.jpeg') }}" alt="result" class="hero-img-placeholder">
-        </div>
-
-    </section>
-
-
-
-    <!-- WHY THIS MATTERS -->
-    <section class="why-section">
-        <h2 class="why-title">Why This Matters:</h2>
-
-        <div class="why-card">
-            Ensuring Everyone Can Navigate the Rapidly Growing World of Economic Data
-        </div>
-
-        <div class="why-card">
-            Equipping Students and Young Professionals to Decode Critical Economic Information
-        </div>
-
-        <div class="why-card">
-            Helping Small Businesses and Communities Thrive Through Actionable Economic Insights
-        </div>
-    </section>
-
-
-
-    <!-- DATA IS THE NEW OIL -->
-    <section class="oil-section">
-        <div class="oil-text">
-            Turning Data into Insight, because<br>
-            <span style="color:var(--dark);">Data is the new oil</span>
-
-            <br><a href="/app" class="btn-main">Analyze Your Data</a>
-        </div>
-
-        <iimg src="{{ url_for('static', filename='images/oil.jpeg') }}" alt="up data" class="hero-img-placeholder">
-    </section>
-
-
-
-    <!-- FOOTER -->
-    <footer>
-        <div>
-            <h3>EconoVision</h3>
-            <p style="opacity:0.8;font-size:0.9rem;">
-                Financial clarity you can trust.<br>
-                Trusted since 1987.
+    <!-- ======= Page Title ======= -->
+    <section class="section light-background py-5">
+        <div class="container text-center" data-aos="fade-up">
+            <h2 class="fw-bold">Start in Minutes, Understand in Moments</h2>
+            <p class="mt-2">
+                Unlock your data instantly. Simple steps, clear insights, zero complexity.
             </p>
         </div>
+    </section>
 
-        <div>
-            <a href="/app" class="footer-btn">Analyze Data</a>
-            <a href="/convert" class="footer-btn">Convert IMG</a>
-            <p style="margin-top:15px; opacity:0.6; font-size:0.8rem;">© 2025 All Rights Reserved</p>
+    <!-- ======= Steps Section ======= -->
+    <section class="section py-5">
+        <div class="container">
+
+            <!-- Step 1 -->
+            <div class="row gy-4 align-items-center mb-5" data-aos="fade-right">
+                <div class="col-lg-6">
+                    <span class="display-3 opacity-50 fw-light">1</span>
+                    <h3 class="fw-bold mt-3">Upload Your Data</h3>
+                    <p>
+                        Upload your economic data in CSV or Excel format with a simple drag-and-drop.
+                        No complicated setup—just select your file and upload smoothly.
+                    </p>
+                </div>
+
+                <div class="col-lg-6 text-center" data-aos="fade-left">
+                    <img src="{{ url_for('static', filename='images/report.jpeg') }}" class="img-fluid rounded-4"
+                        alt="Upload Data">
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="row gy-4 align-items-center mb-5" data-aos="fade-left">
+                <div class="col-lg-6 order-2 order-lg-1">
+                    <span class="display-3 opacity-50 fw-light">2</span>
+                    <h3 class="fw-bold mt-3">Choose Your Analysis</h3>
+                    <p>
+                        Select the variables you want to explore. Pick the data points that matter most,
+                        adjust your selections, and customize the focus of your analysis easily.
+                    </p>
+                </div>
+
+                <div class="col-lg-6 text-center order-1 order-lg-2" data-aos="fade-right">
+                    <img src="{{ url_for('static', filename='images/checklist.jpeg') }}" class="img-fluid rounded-4"
+                        alt="Checklist">
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="row gy-4 align-items-center mb-5" data-aos="fade-right">
+                <div class="col-lg-6">
+                    <span class="display-3 opacity-50 fw-light">3</span>
+                    <h3 class="fw-bold mt-3">Get Your Results</h3>
+                    <p>
+                        View your results instantly in a clean, organized format. Understand key insights,
+                        interpret findings quickly, and use your data confidently.
+                    </p>
+                </div>
+
+                <div class="col-lg-6 text-center" data-aos="fade-left">
+                    <img src="{{ url_for('static', filename='images/result.jpeg') }}" class="img-fluid rounded-4"
+                        alt="Result">
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ======= Why This Matters ======= -->
+    <section class="section light-background py-5">
+        <div class="container">
+
+            <h3 class="text-center fw-bold mb-4" data-aos="zoom-in">Why This Matters</h3>
+
+            <div class="row gy-4">
+                <div class="col-lg-4" data-aos="fade-up">
+                    <div class="service-item position-relative text-center p-4 rounded-4">
+                        Ensuring everyone can navigate the rapidly growing world of economic data.
+                    </div>
+                </div>
+
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="150">
+                    <div class="service-item position-relative text-center p-4 rounded-4">
+                        Equipping students and young professionals to decode critical economic information.
+                    </div>
+                </div>
+
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="service-item position-relative text-center p-4 rounded-4">
+                        Helping small businesses and communities thrive through actionable economic insights.
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- ======= Data is the New Oil ======= -->
+    <section class="call-to-action section">
+        <img src="{{ url_for('static', filename='images/oil.jpeg') }}" alt="Oil">
+
+        <div class="container text-center" data-aos="fade-up">
+            <h3>Turning Data into Insight</h3>
+            <p class="mb-3">
+                Because <strong>data is the new oil</strong>.
+            </p>
+            <a href="/app" class="btn-get-started">Analyze Your Data</a>
+        </div>
+    </section>
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="container footer-top">
+            <div class="row gy-4">
+
+                <div class="col-lg-4 col-md-6 footer-about">
+                    <a href="/" class="logo d-flex align-items-center">
+                        <span class="sitename">EconoVision</span>
+                    </a>
+                    <p>
+                        <strong>Financial Clarity You Can Trust</strong><br>
+                        Trusted financial guidance since 1987.
+                    </p>
+                </div>
+
+                <div class="col-lg-4 col-md-6 footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="/howto">How It Works</a></li>
+                        <li><a href="/app">Analyze Data</a></li>
+                        <li><a href="/convert">Convert IMG</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4 col-md-6 text-lg-end">
+                    <p>© 2025 All Rights Reserved</p>
+                </div>
+
+            </div>
         </div>
     </footer>
 
+    <!-- JS -->
+    <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/vendor/aos/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+
+    <script src="assets/vendor/swiper/swiper-bundle.min.js"></script>
+    <script src="assets/js/main.js"></script>
+
 </body>
+
 </html>
