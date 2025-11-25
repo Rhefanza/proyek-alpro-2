@@ -22,25 +22,61 @@
         /* STEP 2: DATA TYPE */
         #step2 { padding: 80px; text-align: center; }
         .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
-        .card { border: 1px solid #eee; padding: 30px; border-radius: 20px; text-align: left; cursor: pointer; transition: 0.3s; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .card {
+        border: 2px solid #dce7d9; /* soft green border */
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 25px;
+        text-align: left;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        transition: 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+        border-color: #1e3a23; /* border berubah hijau gelap saat hover */
+    }
 
         /* STEP 3: VARIABLE (Design Hijau) */
         #step3 { background: var(--bg-mint); min-height: 85vh; padding: 50px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .input-box { background: #8f9e8f; border: 2px solid var(--dark-green); color: white; padding: 15px; border-radius: 50px; width: 100%; max-width: 500px; margin-bottom: 20px; text-align: left; }
-        .input-box select { background: transparent; border: none; color: white; width: 100%; outline: none; font-weight: 600; }
+        .input-box { background: #8f9e8f; border: 2px solid var(--dark-green); color: black; padding: 15px; border-radius: 50px; width: 100%; max-width: 500px; margin-bottom: 20px; text-align: left; }
+        .input-box select { background: transparent; border: none; color: black; width: 100%; outline: none; font-weight: 600; border-radius: 25px; padding: 8px 12px;}
         .input-box option { color: black; }
         
         /* STEP 4: RESULT */
         #step4 { padding: 50px 10%; }
         .res-box { margin-bottom: 40px; }
         .btn-pdf { background: var(--dark-green); color: white; padding: 12px 30px; border-radius: 8px; text-decoration: none; }
+
+        footer {
+    background-color: var(--dark-green); 
+    color: white;
+    padding: 60px 50px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end;
+}
+
+.footer-btn { 
+    background: white; 
+    color: var(--dark-green); 
+    padding: 10px 20px; 
+    border-radius: 30px; 
+    font-weight: 600; 
+    margin-left: 10px; 
+    text-decoration: none;
+}
+
     </style>
 </head>
 <body>
 
 <nav>
-    <h2 style="margin:0;">EconoVision</h2>
+    <a href="/" style="text-decoration:none; color:inherit;">
+        <h2 style="margin:0;">EconoVision</h2>
+    </a>
     <div>
         <a href="/app" class="btn-nav">Analyze Data</a>
         <a href="/convert" class="btn-nav">Convert IMG</a>
@@ -64,9 +100,9 @@
 <section id="step2" class="hidden">
     <h1>Choose Your Data Type</h1>
     <div class="cards">
-        <div class="card" onclick="setType('cross_section')"><h3>Cross-Section</h3><p>Single point in time.</p></div>
-        <div class="card" onclick="setType('time_series')"><h3>Time-Series</h3><p>Repeated over time.</p></div>
-        <div class="card" onclick="setType('panel')"><h3>Panel Data</h3><p>Combination of both.</p></div>
+        <div class="card" onclick="setType('cross_section')"><h3>Cross-Section 🔘</h3><p>Single point in time.</p></div>
+        <div class="card" onclick="setType('time_series')"><h3>Time-Series ⏱️</h3><p>Repeated over time.</p></div>
+        <div class="card" onclick="setType('panel')"><h3>Panel Data 📆</h3><p>Combination of both.</p></div>
     </div>
 </section>
 
@@ -199,5 +235,22 @@
         document.getElementById('pdfBtn').href = `/api/download-pdf/${id}`;
     }
 </script>
+<footer>
+        <div>
+            <div style="font-size: 1.2rem; font-weight: bold; margin-bottom: 10px;">EcoVision</div>
+            <p style="max-width: 300px; font-size: 0.9rem; opacity: 0.8;">
+                <strong>Financial Clarity You Can Trust</strong><br>
+                Trusted financial guidance since 1987.
+            </p>
+        </div>
+        <div style="text-align: right;">
+            <div style="margin-bottom: 20px;">
+                <span style="margin-right: 15px;">How It Works</span>
+                <a href="/app" class="footer-btn">Analyze Data</a>
+                <a href="/convert" class="footer-btn">Convert IMG</a>
+            </div>
+            <p style="font-size: 0.8rem; opacity: 0.6;">© 2025 All Rights Reserved</p>
+        </div>
+    </footer>
 </body>
 </html>

@@ -77,9 +77,55 @@
         #loadingText { display: none; margin-top: 20px; font-weight: 600; letter-spacing: 1px; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
 
+        /* FOOTER */
+footer {
+    background-color: #1e3a23; 
+    color: white;
+    padding: 60px 50px; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: flex-end;
+}
+
+.footer-btn { 
+    background: white; 
+    color: #1e3a23; 
+    padding: 10px 20px; 
+    border-radius: 30px; 
+    font-weight: 600; 
+    margin-left: 10px; 
+    text-decoration: none;
+}
+nav { 
+    display: flex; 
+    justify-content: space-between; 
+    padding: 20px 50px; 
+}
+
+.btn-nav { 
+    background: var(--dark-green); 
+    color: white; 
+    padding: 8px 20px; 
+    border-radius: 20px; 
+    text-decoration: none; 
+    font-size: 0.9rem; 
+}
+
+
+
     </style>
 </head>
 <body>
+    <nav>
+    <a href="/" style="text-decoration:none; color:inherit;">
+        <h2 style="margin:0;">EconoVision</h2>
+    </a>
+    <div>
+        <a href="/app" class="btn-nav">Analyze Data</a>
+        <a href="/convert" class="btn-nav">Convert IMG</a>
+    </div>
+    </nav>
+
 
     <section class="convert-hero" id="heroSection">
         
@@ -94,15 +140,6 @@
         <button class="btn-upload" onclick="document.getElementById('imgInput').click()">Select Your Image</button>
         
         <p id="loadingText">SCANNING IMAGE...</p>
-
-        <nav class="bottom-nav">
-            <div style="font-weight: bold; font-size: 1.2rem;">EconoVision</div>
-            <div class="nav-links">
-                <a href="#">How It Works</a>
-                <a href="/app" class="btn-nav-white">Analyze Your Data</a>
-                <a href="/convert" class="btn-nav-white">Convert IMG</a>
-            </div>
-        </nav>
     </section>
 
     <section id="resultSection">
@@ -184,5 +221,15 @@
             }
         }
     </script>
+    <footer>
+    <div style="font-weight: bold; font-size: 1.2rem;">EconoVision</div>
+
+    <div>
+        <a href="/" class="footer-btn">Home</a>
+        <a href="/app" class="footer-btn">Analyze</a>
+        <a href="/convert" class="footer-btn">Convert IMG</a>
+    </div>
+</footer>
+
 </body>
 </html>
