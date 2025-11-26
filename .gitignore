@@ -1,0 +1,9 @@
+Lib/
+Scripts/
+Include/
+share/
+__pycache__/
+*.pyc
+*.db
+.env
+uploads/

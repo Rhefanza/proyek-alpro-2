@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyze Data - EconoVision</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        :root {
+            --bg-mint: #d4fce4;       /* Background Utama */
+            --dark-green: #1e3a23;    /* Warna Teks & Tombol */
+            --white: #ffffff;
+            --input-bg: #8f9e8f;      /* Warna Kotak Input */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; color: var(--dark-green); background-color: var(--white); min-height: 100vh; display: flex; flex-direction: column; }
+
+        /* --- UTILS --- */
+        .hidden { display: none !important; }
+        .fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- NAVBAR --- */
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background: var(--white); position: relative; z-index: 10; border-bottom: 1px solid #eee; }
+        .logo { font-size: 1.5rem; font-weight: 600; color: var(--dark-green); text-decoration: none; }
+        .nav-links { display: flex; gap: 20px; }
+        .btn-nav { padding: 8px 24px; border-radius: 50px; font-weight: 600; font-size: 0.85rem; border: none; background-color: var(--dark-green); color: white; text-decoration: none; transition:0.3s; }
+        .btn-nav:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* --- STEP 1: UPLOAD HERO --- */
+        #step1 { background-color: var(--bg-mint); flex: 1; display: flex; align-items: center; justify-content: center; padding: 50px; min-height: 85vh; }
+        .upload-container { display: flex; align-items: center; justify-content: center; max-width: 1100px; width: 100%; gap: 80px; }
+        .upload-img { width: 100%; max-width: 350px; drop-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .upload-title { font-size: 3.5rem; line-height: 1.1; font-weight: 600; margin-bottom: 20px; }
+        .btn-import { background-color: var(--dark-green); color: white; padding: 15px 40px; border-radius: 50px; font-size: 1rem; font-weight: 600; border: none; cursor: pointer; transition: transform 0.2s; }
+        .btn-import:hover { transform: scale(1.05); }
+
+        /* --- STEP 2: CHOOSE DATA TYPE --- */
+        #step2 { padding: 80px 50px; text-align: center; min-height: 80vh; }
+        .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; max-width: 1200px; margin: 50px auto; }
+        .dt-card { background: white; border: 1px solid #eee; border-radius: 20px; padding: 30px; text-align: left; box-shadow: 0 10px 30px rgba(0,0,0,0.05); cursor: pointer; transition: all 0.3s ease; height: 320px; display: flex; flex-direction: column; justify-content: space-between; }
+        .dt-card:hover { transform: translateY(-10px); box-shadow: 0 20px 50px rgba(0,0,0,0.1); border-color: #ccc; }
+        .icon-box { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-right: 10px; font-size: 1.2rem; }
+        .icon-orange { background: #ffe4d6; } .icon-blue { background: #e0f2fe; } .icon-green { background: #dcfce7; }
+
+        /* --- STEP 3: CHOOSE VARIABLE --- */
+        #step3 { background-color: var(--bg-mint); flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px; min-height: 85vh; text-align: center; }
+        .input-group { margin-bottom: 30px; width: 100%; max-width: 600px; text-align: left; }
+        .input-label { font-size: 1.2rem; margin-bottom: 10px; display: block; font-weight: 600; text-align: center; }
+        .custom-select-box { width: 100%; padding: 15px 20px; background-color: var(--input-bg); border: 2px solid var(--dark-green); border-radius: 50px; font-size: 1rem; color: white; outline: none; cursor: pointer; text-align: center; font-weight: 500; }
+        .custom-select-box option { background: white; color: black; text-align: left; }
+        .checkbox-wrapper { background-color: var(--input-bg); border: 2px solid var(--dark-green); border-radius: 20px; padding: 15px; max-height: 150px; overflow-y: auto; color: white; text-align: left; }
+        .checkbox-item { display: block; margin: 5px 0; cursor: pointer; }
+        .btn-analyze-white { background-color: white; color: var(--dark-green); padding: 12px 50px; border-radius: 50px; font-weight: 700; border: none; font-size: 1.1rem; cursor: pointer; margin-top: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); transition: 0.3s; }
+        .btn-analyze-white:hover { transform: scale(1.05); }
+
+        /* --- STEP 4: RESULT REPORT --- */
+        #step4 { padding: 50px 10%; }
+        .res-header { text-align: center; margin-bottom: 50px; }
+        .report-content { max-width: 900px; margin: 0 auto; }
+        .report-section { margin-bottom: 50px; }
+        .report-head { font-size: 2rem; color: var(--dark-green); margin-bottom: 20px; border-bottom: 3px solid #eee; padding-bottom: 10px; }
+        
+        /* Tabel Statistik */
+        .stat-box { background: #f8f9fa; border-left: 5px solid var(--dark-green); padding: 25px; border-radius: 5px; overflow-x: auto; font-family: 'Courier New', monospace; font-size: 0.9rem; line-height: 1.4; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+
+        /* Insight AI */
+        .insight-box { background: #fff; line-height: 1.8; color: #333; font-size: 1rem; }
+        .insight-box h1, .insight-box h2, .insight-box h3 { font-size: 1.2rem; font-weight: 700; color: var(--dark-green); margin-top: 20px; margin-bottom: 10px; }
+        .insight-box strong { color: #000; font-weight: 700; }
+        .insight-box ul, .insight-box ol { padding-left: 25px; margin-bottom: 15px; }
+        .insight-box li { margin-bottom: 5px; }
+
+        .btn-pdf { background-color: var(--dark-green); color: white; padding: 15px 40px; border-radius: 8px; text-decoration: none; font-weight: 600; display: inline-block; transition: 0.3s; }
+        .btn-pdf:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* Loading Overlay */
+        #loadingOverlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .spinner { font-size: 4rem; animation: spin 1s infinite linear; margin-bottom: 20px; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="/" class="logo">EconoVision</a>
+        <div class="nav-links">
+            <a href="#" class="btn-nav" style="background:transparent; color:var(--dark-green);">How It Works</a>
+            <a href="/app" class="btn-nav">Analyze Data</a>
+            <a href="/convert" class="btn-nav">Convert IMG</a>
+        </div>
+    </nav>
+
+    <div id="loadingOverlay" class="hidden">
+        <div class="spinner">⏳</div>
+        <h2 style="color: var(--dark-green);">Processing...</h2>
+        <p>AI is analyzing your data.</p>
+    </div>
+
+    <input type="hidden" id="datasetId">
+    <input type="hidden" id="dataType">
+
+    <section id="step1">
+        <div class="upload-container">
+            <div style="flex: 1; display: flex; justify-content: flex-end;">
+                <img src="{{ url_for('static', filename='images/upload-hero.png') }}" class="upload-img" alt="File">
+            </div>
+            <div style="flex: 1;">
+                <h1 class="upload-title">Upload Your<br>Dataset now</h1>
+                <p style="margin-bottom: 40px; opacity: 0.8;">Serving an Analyze to your own data</p>
+                
+                <input type="file" id="fileInput" style="display: none;" accept=".csv, .xlsx, .xls" onchange="uploadFile()">
+                <button class="btn-import" onclick="document.getElementById('fileInput').click()">Import Your Data</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="step2" class="hidden">
+        <h1 style="font-size: 3rem; font-weight: 600; margin-bottom: 10px;">Choose Your Data Type</h1>
+        <p style="color: #888; margin-bottom: 60px;">Select Your Own Data Type</p>
+        <div class="cards-grid">
+            <div class="dt-card" onclick="setType('cross_section')">
+                <p style="color:#666; line-height:1.6;">Data collected from many units at a single point in time.</p>
+                <div style="display:flex; align-items:center; margin-top:auto; font-weight:600; font-size:1.1rem;"><div class="icon-box icon-orange">☺</div> Cross-Section</div>
+            </div>
+            <div class="dt-card" onclick="setType('time_series')">
+                <p style="color:#666; line-height:1.6;">Data collected from the same unit repeatedly over time.</p>
+                <div style="display:flex; align-items:center; margin-top:auto; font-weight:600; font-size:1.1rem;"><div class="icon-box icon-blue">☺</div> Time-Series</div>
+            </div>
+            <div class="dt-card" onclick="setType('panel')">
+                <p style="color:#666; line-height:1.6;">A combination of both: multiple units observed across multiple time periods.</p>
+                <div style="display:flex; align-items:center; margin-top:auto; font-weight:600; font-size:1.1rem;"><div class="icon-box icon-green">☺</div> Panel Data</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="step3" class="hidden">
+        <h1 class="var-title">Choose Your Variable</h1>
+        
+        <div class="input-group">
+            <label class="input-label">Targets Variables (Y)</label>
+            <select id="yVar" class="custom-select-box"><option>Loading...</option></select>
+        </div>
+
+        <div class="input-group">
+            <label class="input-label">Predictor Variables (X)</label>
+            <div id="xVarsContainer" class="checkbox-wrapper"></div>
+        </div>
+
+        <div id="panelInputs" class="hidden" style="width:100%; max-width:600px;">
+            <div class="input-group"><label class="input-label">Entity Column</label><select id="entityCol" class="custom-select-box"></select></div>
+            <div class="input-group"><label class="input-label">Time Column</label><select id="timeCol" class="custom-select-box"></select></div>
+        </div>
+
+        <button class="btn-analyze-white" onclick="startAnalysis()">Analyze</button>
+    </section>
+
+    <section id="step4" class="hidden">
+        <div class="res-header">
+            <h1 class="res-title" style="font-size: 3rem; font-weight: 700; color: var(--dark-green);">Data Report</h1>
+            <img src="{{ url_for('static', filename='images/report-hero.png') }}" style="max-width:100%; height:200px; object-fit:cover; border-radius:20px; margin-top:30px;">
+        </div>
+
+        <div class="report-content">
+            <div class="report-section">
+                <h2 class="report-head">Statistic Analyze</h2>
+                <div id="statContent" class="stat-box">Loading...</div>
+            </div>
+
+            <div class="report-section">
+                <h2 class="report-head">Insight</h2>
+                <div id="insightContent" class="insight-box">Generating AI insight...</div>
+            </div>
+
+            <div class="report-section">
+                <h2 class="report-head">Forecasting</h2>
+                <p style="font-size:1.1rem; color:#555; line-height:1.8;">
+                    Forecasting analysis provides estimates of future trends based on the historical data patterns identified above.
+                </p>
+            </div>
+
+            <div style="text-align: center; margin-top: 60px;">
+                <a id="pdfBtn" href="#" target="_blank" class="btn-pdf">Export to PDF</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // --- NAVIGASI HALAMAN (PENTING) ---
+        function switchStep(stepId) {
+            // Sembunyikan semua step
+            ['step1', 'step2', 'step3', 'step4'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
+            });
+            
+            // Tampilkan step tujuan
+            const target = document.getElementById(stepId);
+            if(target) {
+                target.classList.remove('hidden');
+                target.classList.add('fade-in');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function toggleLoading(show) {
+            const el = document.getElementById('loadingOverlay');
+            if(show) el.classList.remove('hidden');
+            else el.classList.add('hidden');
+        }
+
+        // --- LOGIC AUTO-LOAD (REDIRECT DARI OCR) ---
+        window.onload = async function() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('dataset_id');
+            if(id) {
+                document.getElementById('datasetId').value = id;
+                toggleLoading(true);
+                try {
+                    // Fetch dataset info untuk dropdown
+                    const res = await fetch(`/api/datasets/${id}`);
+                    const data = await res.json();
+                    fillInputs(data.columns);
+                    toggleLoading(false);
+                    switchStep('step2'); // Lompat ke Pilih Tipe Data
+                } catch(e) {
+                    alert("Gagal memuat data: " + e);
+                    toggleLoading(false);
+                }
+            }
+        };
+
+        // --- STEP 1: UPLOAD ---
+        async function uploadFile() {
+            const file = document.getElementById('fileInput').files[0];
+            if(!file) return;
+
+            toggleLoading(true);
+            const fd = new FormData(); fd.append('file', file);
+
+            try {
+                const res = await fetch('/datasets', { method: 'POST', body: fd });
+                const data = await res.json();
+
+                if(res.ok) {
+                    document.getElementById('datasetId').value = data.dataset_id;
+                    fillInputs(data.columns);
+                    toggleLoading(false);
+                    switchStep('step2'); // Pindah otomatis ke Step 2
+                } else {
+                    alert("Error: " + data.error);
+                    toggleLoading(false);
+                }
+            } catch(e) {
+                alert("Koneksi Error");
+                toggleLoading(false);
+            }
+        }
+
+        // --- STEP 2: PILIH TIPE ---
+        function setType(type) {
+            document.getElementById('dataType').value = type;
+            
+            const panel = document.getElementById('panelInputs');
+            if(type === 'panel') panel.classList.remove('hidden');
+            else panel.classList.add('hidden');
+            
+            switchStep('step3'); // Pindah otomatis ke Step 3
+        }
+
+        // --- STEP 3: VARIABEL ---
+        function fillInputs(cols) {
+            const y = document.getElementById('yVar');
+            const ent = document.getElementById('entityCol');
+            const time = document.getElementById('timeCol');
+            const x = document.getElementById('xVarsContainer');
+
+            y.innerHTML = ent.innerHTML = time.innerHTML = '<option value="">-- Select Column --</option>';
+            x.innerHTML = '';
+
+            cols.forEach(c => {
+                const opt = `<option value="${c}">${c}</option>`;
+                y.innerHTML += opt; ent.innerHTML += opt; time.innerHTML += opt;
+                x.innerHTML += `<label class="checkbox-item"><input type="checkbox" value="${c}" style="margin-right:10px;"> ${c}</label>`;
+            });
+        }
+
+        async function startAnalysis() {
+            const xVars = Array.from(document.querySelectorAll('#xVarsContainer input:checked')).map(i => i.value);
+            
+            const payload = {
+                dataset_id: document.getElementById('datasetId').value,
+                data_type: document.getElementById('dataType').value,
+                y_var: document.getElementById('yVar').value,
+                x_vars: xVars,
+                entity_col: document.getElementById('entityCol').value,
+                time_col: document.getElementById('timeCol').value
+            };
+
+            if(!payload.y_var) return alert("Pilih variabel target (Y) dulu!");
+
+            toggleLoading(true);
+
+            try {
+                const res = await fetch('/analyses', { 
+                    method: 'POST', 
+                    headers:{'Content-Type':'application/json'}, 
+                    body:JSON.stringify(payload)
+                });
+                const d = await res.json();
+
+                if(res.status === 202) {
+                    pollResult(d.analysis_id);
+                } else {
+                    alert("Error: " + d.error);
+                    toggleLoading(false);
+                }
+            } catch(e) {
+                alert("Error System");
+                toggleLoading(false);
+            }
+        }
+
+        // --- POLLING & RESULT ---
+        async function pollResult(id) {
+            const interval = setInterval(async () => {
+                const res = await fetch(`/analyses/${id}`);
+                const final = await res.json();
+
+                if(final.status === 'completed') {
+                    clearInterval(interval);
+                    renderReport(final.results, final.interpretation, id);
+                    toggleLoading(false);
+                    switchStep('step4'); // Pindah ke Result
+                } else if(final.status === 'failed') {
+                    clearInterval(interval);
+                    alert("Analysis Failed: " + final.error);
+                    toggleLoading(false);
+                }
+            }, 500);
+        }
+
+        function renderReport(res, insight, id) {
+            // Statistik
+            let table = res.final_model_estimation?.summary_table || res.model_estimation?.summary_table || "No Data";
+            document.getElementById('statContent').innerText = table;
+
+            // Insight (Markdown Render)
+            if(insight && typeof marked !== 'undefined') {
+                document.getElementById('insightContent').innerHTML = marked.parse(insight);
+            } else {
+                document.getElementById('insightContent').innerText = insight || "No insight.";
+            }
+
+            // PDF Link
+            document.getElementById('pdfBtn').href = `/api/download-pdf/${id}`;
+        }
+    </script>
+</body>
+</html>
