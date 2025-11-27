@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>EconoVision - Upload</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="nav">
+    <div class="logo">EconoVision</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="how.html">How It Works</a>
+      <a href="report.html">Report</a>
+    </nav>
+  </header>
+
+  <main style="max-width:1100px;margin:40px auto;padding:0 6%">
+    <section class="hero" style="border-radius:14px;padding:40px;display:flex;gap:30px;align-items:center">
+      <div style="flex:1;min-height:260px;background:url('/mnt/data/6fa86723-0d29-4603-8a0e-bc07bcc532e6.png') center/cover no-repeat;border-radius:12px"></div>
+      <div style="flex:1">
+        <h1>Upload Your Dataset now</h1>
+        <p class="small">Serving an Analyze to your own data</p>
+        <div style="margin-top:18px">
+          <label class="btn-ghost" style="cursor:pointer;display:inline-block">
+            <input id="fileInput" type="file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,image/*" style="display:none">
+            Import Your Data
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:28px;background:var(--mint-2);padding:18px;border-radius:12px">
+      <h3>Data Options</h3>
+      <div style="display:flex;gap:12px;align-items:center">
+        <label>Data Type:
+          <select id="dataType">
+            <option value="cross">Cross Section</option>
+            <option value="time">Time Series</option>
+            <option value="panel">Panel</option>
+          </select>
+        </label>
+        <button id="autoDetect" class="btn-ghost">Auto-detect</button>
+      </div>
+
+      <div id="varChooser" style="margin-top:12px">
+        <p class="small">Select variables (after upload)</p>
+      </div>
+
+      <div id="fileInfo" style="margin-top:12px"></div>
+      <div id="analysisPreview" style="margin-top:12px"></div>
+
+      <div style="margin-top:18px"><button id="goReport" class="btn-ghost">Run Analysis & Go to Report</button></div>
+    </section>
+  </main>
+
+  <footer class="footer">© 2025 EconoVision</footer>
+  <script src="script.js"></script>
+</body>
+</html>
